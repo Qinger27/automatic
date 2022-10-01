@@ -1,0 +1,27 @@
+name: ClockIn
+
+on:
+  push:
+  watch:
+    types: started
+  schedule:
+    - cron: '*/6 * * * *'
+
+jobs:
+  ClockIn:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: install python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.0'
+      - name: install packages
+        run: pip install requests
+      - name: Clock In
+        env:
+          ACCOUNT: ${{ secrets.ACCOUNT }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+        run: |
+          python clock-in.py ${ACCOUNT} ${PASSWORD}
